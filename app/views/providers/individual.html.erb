@@ -1,7 +1,16 @@
 <h1>Individual Info</h1>
-<%= @resp %>
+<%= render "new_token" %>
+<p>
+  <%= link_to "Back to #{@providers[@provider.to_sym]}", provider_show_path(@provider) %>
+</p>
 
-<h2>Individual</h2>
+<h2>
+  <% if @individual['id'] %>
+    <%= [@individual['first_name'], @individual['middle_name'], @individual['last_name']].join(' ') %>
+  <% else %>
+    Individual
+  <% end %>
+</h2>
 <div>
   <table>
     <tr>
@@ -93,11 +102,10 @@
       <td><strong>Manager</strong></td>
       <td>
         <% if @employment['manager']['id'] %>
-          <a href=<%="/providers/#{@provider}/individuals/#{@employment['manager']['id']}"%>><%= @employment['manager']['id'] %></a>
+          <%= link_to @employment['manager']['id'], individual_show_path(@provider, @employment['manager']['id']) %>
         <% end %>
       </td>
     </tr>
-
     <tr>
       <td><strong>Employment Type</strong></td>
       <td><%= @employment['employment'].try(:[], 'type') %> <%= @employment['employment'].try(:[], 'subtype') %></td>

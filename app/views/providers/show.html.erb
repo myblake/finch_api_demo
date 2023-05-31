@@ -1,5 +1,8 @@
 <h1>Provider: <%= @providers[@provider.to_sym] %></h1>
-<%= @resp %>
+<%= render "new_token" %>
+<p>
+  <%= link_to "Back to providers list", providers_path %>
+</p>
 
 <h2>Company Information</h2>
 <div>
@@ -106,11 +109,15 @@
       </thead>
     <% @directory["individuals"].try(:each) do |individual| %>
       <tr>
-        <td><a href=<%="/providers/#{@provider}/individuals/#{individual["id"]}"%>><%= individual["id"] %></a></td>
+        <td><%= link_to @employee_names[individual["id"]], individual_show_path(@provider, individual['id']) %></td>
         <td><%= individual["first_name"] %></td>
         <td><%= individual["middle_name"] %></td>
         <td><%= individual["last_name"] %></td>
-        <td><a href=<%="/providers/#{@provider}/individuals/#{individual["manager"]["id"]}"%>><%= @employee_names[individual["manager"]["id"]] %></a></td>
+        <td>
+          <% if individual["manager"]["id"] %>
+            <%= link_to @employee_names[individual["manager"]["id"]], individual_show_path(@provider, individual['manager']['id']) %>
+          <% end %>
+        </td>
         <td><%= individual["department"]["name"] %></td>
         <td><%= individual['is_active'] %></td>
       </tr>
