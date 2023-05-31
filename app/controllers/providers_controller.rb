@@ -2,12 +2,13 @@ require 'finch_client'
 
 class ProvidersController < ApplicationController
     before_action :providers_list
-    before_action :set_provider_and_access_token, except: :index
 
     def index
     end
 
     def show
+        set_provider_and_access_token
+
         @information = @client.get_information
         @directory = @client.get_directory
         
@@ -16,19 +17,28 @@ class ProvidersController < ApplicationController
     end
 
     def individual
+        set_provider_and_access_token
+
         @individual_id = params[:individual_id]
 
-        # TODO handle this better
+        if params[:fake_501]
+            @individual_response = {'code' => 501, 'name' => 'not_implemented_error'}
+            @employment_response = {'code' => 501, 'name' => 'not_implemented_error'}
+        else
 
-        # when restarting server and IDS invalid this object is a nicely formatted error
-        # e.g. {"error_name"=>"invalid_request_error", "error_message"=>"No individual with id bc7ccc0b-f269-4baa-9627-ab80cc3249f0"}
+            # if no ee with given ID response body is nicely formatted error, handle in client
+            # e.g. {"error_name"=>"invalid_request_error", "error_message"=>"No individual with id bc7ccc0b-f269-4baa-9627-ab80cc3249f0"}
+            @individual_response = @client.get_individual(@individual_id)
 
-        # can assume likely the same issue on not implemented
-        # @individual['code'] == 501 and @individual['name'] == 'not_implemented_error'
+            if @individual_response.code == 200
+                @individual = @individual_response['responses'].first['body']
+            end
 
-        @individual = @client.get_individual(@individual_id)['responses'].first['body']
-        @employment = @client.get_employment(@individual_id)['responses'].first['body']
-        # debugger
+            @employment_response = @client.get_employment(@individual_id)
+            if @employment_response.code == 200
+                @employment = @employment_response['responses'].first['body']
+            end
+        end
     end
 
     private

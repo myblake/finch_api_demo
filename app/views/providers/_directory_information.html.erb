@@ -1,0 +1,26 @@
+<table>
+  <thead>
+    <th>ID</th>
+    <th>First Name</th>
+    <th>Middle Name</th>
+    <th>Last Name</th>
+    <th>Manager</th>
+    <th>Department Name</th>
+    <th>active</th>
+  </thead>
+  <% @directory["individuals"].try(:each) do |individual| %>
+    <tr>
+      <td><%= link_to @employee_names[individual["id"]], individual_show_path(@provider, individual['id']) %></td>
+      <td><%= individual["first_name"] %></td>
+      <td><%= individual["middle_name"] %></td>
+      <td><%= individual["last_name"] %></td>
+      <td>
+        <% if individual["manager"]["id"] %>
+          <%= link_to @employee_names[individual["manager"]["id"]], individual_show_path(@provider, individual['manager']['id']) %>
+        <% end %>
+      </td>
+      <td><%= individual["department"]["name"] %></td>
+      <td><%= individual['is_active'] %></td>
+    </tr>
+  <% end %>
+</table>

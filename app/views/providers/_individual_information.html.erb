@@ -1,0 +1,61 @@
+<table>
+  <tr>
+    <td><strong>ID</strong></td>
+    <td><%= @individual['id'] %></td>
+  </tr>
+  <tr>
+    <td><strong>First Name</strong></td>
+    <td><%= @individual['first_name'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Middle Name</strong></td>
+    <td><%= @individual['middle_name'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Last Name</strong></td>
+    <td><%= @individual['last_name'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Preferred Name</strong></td>
+    <td><%= @individual['preferred_name'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Date of Birth</strong></td>
+    <td><%= @individual['dob'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Gender</strong></td>
+    <td><%= @individual['gender'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Ethnicity</strong></td>
+    <td><%= @individual['ethnicity'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Emails</strong></td>
+    <td>
+      <% @individual['emails'].try(:each) do |email| %>
+        <%= email['data'] %> (<%= email['type'] %>)<br />
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Phone Numbers</strong></td>
+    <td>
+      <% @individual['phone_numbers'].try(:each) do |phone| %>
+        <%= phone['data'] %> (<%= phone['type'] %>)<br />
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Residence</strong></td>
+    <td>
+      <% if @individual['residence'] %>
+        <%= @individual['residence']['line1'] %><br />
+        <%= @individual['residence']['line2'] %><br />
+        <%= @individual['residence']['city'] %>, <%= @individual['residence']['state'] %> <%= @individual['residence']['postal_code'] %>
+        <%= @individual['residence']['country'] %>
+      <% end %>
+    </td>
+  </tr>
+</table>

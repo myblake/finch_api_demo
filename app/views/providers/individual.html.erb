@@ -5,169 +5,33 @@
 </p>
 
 <h2>
-  <% if @individual['id'] %>
+  <% if @individual.try(:[], 'id') %>
     <%= [@individual['first_name'], @individual['middle_name'], @individual['last_name']].join(' ') %>
   <% else %>
     Individual
   <% end %>
 </h2>
 <div>
-  <table>
-    <tr>
-      <td><strong>ID</strong></td>
-      <td><%= @individual['id'] %></td>
-    </tr>
-    <tr>
-      <td><strong>First Name</strong></td>
-      <td><%= @individual['first_name'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Middle Name</strong></td>
-      <td><%= @individual['middle_name'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Last Name</strong></td>
-      <td><%= @individual['last_name'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Preferred Name</strong></td>
-      <td><%= @individual['preferred_name'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Date of Birth</strong></td>
-      <td><%= @individual['dob'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Gender</strong></td>
-      <td><%= @individual['gender'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Ethnicity</strong></td>
-      <td><%= @individual['ethnicity'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Emails</strong></td>
-      <td>
-        <% @individual['emails'].try(:each) do |email| %>
-          <%= email['data'] %> (<%= email['type'] %>)<br />
-        <% end %>
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Phone Numbers</strong></td>
-      <td>
-        <% @individual['phone_numbers'].try(:each) do |phone| %>
-          <%= phone['data'] %> (<%= phone['type'] %>)<br />
-        <% end %>
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Residence</strong></td>
-      <td>
-        <% if @individual['residence'] %>
-          <%= @individual['residence']['line1'] %><br />
-          <%= @individual['residence']['line2'] %><br />
-          <%= @individual['residence']['city'] %>, <%= @individual['residence']['state'] %> <%= @individual['residence']['postal_code'] %>
-          <%= @individual['residence']['country'] %>
-        <% end %>
-      </td>
-    </tr>
-  </table>
+  <% if @individual_response['code'] == 501 and @individual_response['name'] == 'not_implemented_error' %>
+    <%= @providers[@provider.to_sym] %> does not implment the 'employer/individual' endpoint.
+  <% elsif @individual_response.body == '"Unauthorized: Insufficient product scopes"' %>
+    Error <%= @individual_response %>, create a sandbox with the scope for 'employer/individual' enabled.
+  <% elsif @individual['error_name'] %>
+    Error <%= @individual['error_message'] %>
+  <% else %>
+    <%= render 'individual_information' %>
+  <% end %>
 </div>
 
 <h2>Employment</h2>
 <div>
-  <table>
-    <tr>
-      <td><strong>ID</strong></td>
-      <td><%= @employment['id'] %></td>
-    </tr>
-    <tr>
-      <td><strong>First Name</strong></td>
-      <td><%= @employment['first_name'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Middle Name</strong></td>
-      <td><%= @employment['middle_name'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Last Name</strong></td>
-      <td><%= @employment['last_name'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Title</strong></td>
-      <td><%= @employment['title'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Manager</strong></td>
-      <td>
-        <% if @employment['manager']['id'] %>
-          <%= link_to @employment['manager']['id'], individual_show_path(@provider, @employment['manager']['id']) %>
-        <% end %>
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Employment Type</strong></td>
-      <td><%= @employment['employment'].try(:[], 'type') %> <%= @employment['employment'].try(:[], 'subtype') %></td>
-    </tr>
-    <tr>
-      <td><strong>Department</strong></td>
-      <td><%= @employment['department'].try(:[], 'name') %></td>
-    </tr>
-    <tr>
-      <td><strong>Start Date</strong></td>
-      <td><%= @employment['start_date'] %></td>
-    </tr>
-    <tr>
-      <td><strong>End Date</strong></td>
-      <td><%= @employment['end_date'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Active</strong></td>
-      <td><%= @employment['is_active'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Class Code</strong></td>
-      <td><%= @employment['class_code'] %></td>
-    </tr>
-    <tr>
-      <td><strong>Location</strong></td>
-      <td>
-        <% if @employment['location'] %>
-          <%= @employment['location']['line1'] %><br />
-          <%= @employment['location']['line2'] %><br />
-          <%= @employment['location']['city'] %>, <%= @employment['location']['state'] %> <%= @employment['location']['postal_code'] %>
-          <%= @employment['location']['country'] %>
-        <% end %>
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Income</strong></td>
-      <td>
-        <% if @employment['income'] %>
-          <%= @employment['income']['amount'] %>
-          <%= @employment['income']['currency'] %>
-          <%= @employment['income']['unit'] %>,
-          effective <%= @employment['income']['effective_date'] %>
-        <% end %>
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Income History</strong></td>
-      <td>
-        <% @employment['income_history'].try(:each) do |income| %>
-          <%= income['amount'] %>
-          <%= income['currency'] %>
-          <%= income['unit'] %>,
-          effective <%= income['effective_date'] %><br />
-        <% end %>
-      </td>
-    </tr>
-    <% @employment["custom_fields"].try(:each) do |custom_field| %>
-      <tr>
-        <td><strong><%= custom_field["name"] %></strong></td>
-        <td><%= custom_field["value"] %></td>
-      </tr>
-    <% end %>
-  </table>
+  <% if @employment_response['code'] == 501 and @employment_response['name'] == 'not_implemented_error' %>
+    <%= @providers[@provider.to_sym] %> does not implment the 'employer/employment' endpoint.
+  <% elsif @employment_response.body == '"Unauthorized: Insufficient product scopes"' %>
+    Error <%= @employment_response %>, create a sandbox with the scope for 'employer/employment' enabled.
+  <% elsif @employment['error_name'] %>
+    Error <%= @employment['error_message'] %>
+  <% else %>
+    <%= render 'employment_information' %>
+  <% end %>
 </div>

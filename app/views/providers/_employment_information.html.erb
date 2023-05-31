@@ -1,0 +1,93 @@
+<table>
+  <tr>
+    <td><strong>ID</strong></td>
+    <td><%= @employment['id'] %></td>
+  </tr>
+  <tr>
+    <td><strong>First Name</strong></td>
+    <td><%= @employment['first_name'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Middle Name</strong></td>
+    <td><%= @employment['middle_name'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Last Name</strong></td>
+    <td><%= @employment['last_name'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Title</strong></td>
+    <td><%= @employment['title'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Manager</strong></td>
+    <td>
+      <% if @employment['manager']['id'] %>
+        <%= link_to @employment['manager']['id'], individual_show_path(@provider, @employment['manager']['id']) %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Employment Type</strong></td>
+    <td><%= @employment['employment'].try(:[], 'type') %> <%= @employment['employment'].try(:[], 'subtype') %></td>
+  </tr>
+  <tr>
+    <td><strong>Department</strong></td>
+    <td><%= @employment['department'].try(:[], 'name') %></td>
+  </tr>
+  <tr>
+    <td><strong>Start Date</strong></td>
+    <td><%= @employment['start_date'] %></td>
+  </tr>
+  <tr>
+    <td><strong>End Date</strong></td>
+    <td><%= @employment['end_date'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Active</strong></td>
+    <td><%= @employment['is_active'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Class Code</strong></td>
+    <td><%= @employment['class_code'] %></td>
+  </tr>
+  <tr>
+    <td><strong>Location</strong></td>
+    <td>
+      <% if @employment['location'] %>
+        <%= @employment['location']['line1'] %><br />
+        <%= @employment['location']['line2'] %><br />
+        <%= @employment['location']['city'] %>, <%= @employment['location']['state'] %> <%= @employment['location']['postal_code'] %>
+        <%= @employment['location']['country'] %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Income</strong></td>
+    <td>
+      <% if @employment['income'] %>
+        <%= @employment['income']['amount'] %>
+        <%= @employment['income']['currency'] %>
+        <%= @employment['income']['unit'] %>,
+        effective <%= @employment['income']['effective_date'] %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Income History</strong></td>
+    <td>
+      <% @employment['income_history'].try(:each) do |income| %>
+        <%= income['amount'] %>
+        <%= income['currency'] %>
+        <%= income['unit'] %>,
+        effective <%= income['effective_date'] %><br />
+      <% end %>
+    </td>
+  </tr>
+  <% @employment["custom_fields"].try(:each) do |custom_field| %>
+    <tr>
+      <td><strong><%= custom_field["name"] %></strong></td>
+      <td><%= custom_field["value"] %></td>
+    </tr>
+  <% end %>
+</table>
