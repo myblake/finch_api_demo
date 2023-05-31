@@ -1,0 +1,89 @@
+<h1>Provider: <%= @providers[@provider.to_sym] %></h1>
+<%= @resp %>
+
+<h2>Company Information</h2>
+<div>
+    <table>
+        <tr>
+            <td><strong>ID</strong></td>
+            <td><%= @information['id'] %></td>
+        </tr>
+        <tr>
+            <td><strong>Legal Name</strong></td>
+            <td><%= @information['legal_name'] %></td>
+        </tr>
+        <tr>
+            <td><strong>Entity</strong></td>
+            <td>Type: <%= @information['entity'].try(:[], 'type') %> Subtype: <%= @information['entity'].try(:[], 'subtype') %></td>
+        </tr>
+        <tr>
+            <td><strong>EIN</strong></td>
+            <td><%= @information['ein'] %></td>
+        </tr>
+        <tr>
+            <td><strong>Primary Email</strong></td>
+            <td><%= @information['primary_email'] %></td>
+        </tr>
+        <tr>
+            <td><strong>Primary Phone</strong></td>
+            <td><%= @information['primary_phone_number'] %></td>
+        </tr>
+        <tr>
+            <td><strong>Departments</strong></td>
+            <td>
+                <% @information['departments'].each do |department| %>
+                    Name: <%= department['name'] %>, Parent: <%= department['parent'].try(:[], 'name') %><br />
+                <% end %>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Locations</strong></td>
+            <td>
+                <% @information['locations'].each do |location| %>
+                    <%= location['line1'] %><br />
+                    <%= location['line2'] %><br />
+                    <%= location['city'] %>, <%= location['state'] %> <%= location['postal_code'] %>
+                <% end %>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Accounts</strong></td>
+            <td>
+                <% @information['accounts'].each do |account| %>
+                    Institution Name <%= account['institution_name'] %><br />
+                    Account Name <%= account['account_name'] %><br />
+                    Account Number <%= account['account_number'] %><br />
+                    Account Type <%= account['account_type'] %><br />
+                    Routing Number <%= account['routing_number'] %><br />
+                <% end %>
+            </td>
+        </tr>
+    <table>
+</div>
+
+<h2>Employee Directory</h2>
+<div>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Manager</th>
+            <th>Department Name</th>
+            <th>active</th>
+        </thead>
+    <% @directory["individuals"].each do |individual| %>
+        <tr>
+            <td><a href=<%="/providers/#{@provider}/individuals/#{individual["id"]}"%>><%= individual["id"] %></a></td>
+            <td><%= individual["first_name"] %></td>
+            <td><%= individual["middle_name"] %></td>
+            <td><%= individual["last_name"] %></td>
+            <td><a href=<%="/providers/#{@provider}/individuals/#{individual["manager"]["id"]}"%>><%= @employee_names[individual["manager"]["id"]] %></a></td>
+            <td><%= individual["department"]["name"] %></td>
+            <td><%= individual['is_active'] %></td>
+        </tr>
+    <% end %>
+    </table>
+    
+</div>
