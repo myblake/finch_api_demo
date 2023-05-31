@@ -13,3 +13,33 @@
  *= require_tree .
  *= require_self
  */
+
+body {
+  background-color: rgb(230, 230, 230);
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  padding: 4px;
+}
+
+td,
+th {
+  padding: 4px;
+}
+
+thead tr {
+  border-bottom: 1px solid #000;
+  background-color: rgb(200, 200, 200);
+}
+
+a {
+  text-decoration: none;
+}
+
+a:visited {
+  color: rgb(0, 0, 128);
+}

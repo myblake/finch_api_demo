@@ -1,14 +1,14 @@
 <main>
-    <div>
-        <h1>
-            Providers currently supported by Finch sandbox API:
-        </h1>
-    </div>
-    <ul>
-        <% @providers.keys.each do |provider| %>
-            <li>
-                <a href=<%= "/providers/#{provider}"%> ><%= @providers[provider] %></a>
-            </li>
-        <% end %>
-    </ul>
+  <div>
+    <h1>
+      Providers currently supported by Finch sandbox API:
+    </h1>
+  </div>
+  <ul>
+    <% @providers.keys.each do |provider| %>
+      <li>
+        <a href=<%= "/providers/#{provider}"%> ><%= @providers[provider] %></a>
+      </li>
+    <% end %>
+  </ul>
 </main>
