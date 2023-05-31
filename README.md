@@ -2,7 +2,7 @@
 
 This demo is built in rails, which is overkill. But it should be straight forward to set up locally.
 
-Make sure you have ruby >= 3.0.0, if not check out RVM installation [here|https://rvm.io/rvm/install]
+Make sure you have ruby >= 3.0.0, if not check out [RVM installation here](https://rvm.io/rvm/install) or use the ruby version manager of your choice.
 
 Once done you should be able to run `bundle` and `rails s` to run the application locally on port 3000 provided it's not in use.
 
