@@ -23,12 +23,13 @@ class ProvidersController < ApplicationController
         @information = client.get_information
         @directory = client.get_directory
         
+        # TODO handle error better
         @employee_names = {}
         @directory["individuals"].each do |individual| 
             ee_name = "#{individual['first_name']} #{individual['last_name']}"
             @employee_names[individual["id"]] = ee_name
         end
-        # debugger
+        
     end
 
     def individual
